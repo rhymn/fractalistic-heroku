@@ -1,8 +1,7 @@
 
 
 var mongo = require('mongodb');
-var url = process.env.MONGOHQ_URL || 'mongodb://fractalistic:fractalistic-pwd@troup.mongohq.com:10080/fractalistic';
-
+var url = process.env.MONGOHQ_URL; // Stored in config file since we don't want this in public repo
 
 
 exports.index = function(req, res){
