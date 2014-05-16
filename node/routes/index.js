@@ -65,7 +65,7 @@ exports.getsettings = function(req, res){
 
 
 exports.setsettings = function(req, res){
-  var SettingsEntity = new SettingsEntity();
+  var settingsEntity = new SettingsEntity();
 
   settingsEntity.mode = req.query.mode || null;
 
@@ -78,7 +78,7 @@ exports.setsettings = function(req, res){
 
   settingsRepository.persist(settingsEntity);
 
-  res.send(':)');
+  res.json(settingsEntity);
 };
 
 
@@ -103,7 +103,7 @@ exports.setstat = function(req, res){
 
   measureRepository.persist(measureEntity);
 
-  res.send(':)');
+  res.json(measureEntity);
 };
 
 
