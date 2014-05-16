@@ -1,12 +1,19 @@
+try {
+  var config = require('../config');
+} catch (e) {}
+
 var MeasureRepository = require('./MeasureRepository');
 var SettingsRepository = require('./SettingsRepository');
 
+var url = process.env.MONGOHQ_URL || config.MONGOHQ_URL;
 
 function MeasureEntity(){}
 function SettingsEntity(){}
 
-var measureRepository = new MeasureRepository.MeasureRepository();
-var settingsRepository = new SettingsRepository.SettingsRepository();
+var measureRepository = new MeasureRepository.MeasureRepository(url);
+var settingsRepository = new SettingsRepository.SettingsRepository(url);
+
+
 
 
 exports.index = function(req, res){
@@ -105,6 +112,4 @@ exports.setstat = function(req, res){
 
   res.json(measureEntity);
 };
-
-
 

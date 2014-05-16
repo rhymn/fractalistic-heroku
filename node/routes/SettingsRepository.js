@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 
-function SettingsRepository(){
-  this.url = process.env.MONGOHQ_URL || 'mongodb://fractalistic:fractalistic-pwd@troup.mongohq.com:10080/fractalistic';
+function SettingsRepository(url){
+  this.url = url;
 }
 
 SettingsRepository.prototype.persist = function(entity){
@@ -14,7 +14,6 @@ SettingsRepository.prototype.persist = function(entity){
       });
     });
   });
-
 }
 
 SettingsRepository.prototype.findOne = function(id, callback){

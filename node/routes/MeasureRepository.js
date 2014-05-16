@@ -1,7 +1,7 @@
 var mongo = require('mongodb');
 
-function MeasureRepository(){
-  this.url = process.env.MONGOHQ_URL || 'mongodb://fractalistic:fractalistic-pwd@troup.mongohq.com:10080/fractalistic';
+function MeasureRepository(url){
+  this.url = url;
 }
 
 MeasureRepository.prototype.persist = function(entity){
