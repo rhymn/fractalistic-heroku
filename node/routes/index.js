@@ -1,7 +1,12 @@
+var MeasureRepository = require('./MeasureRepository');
+var SettingsRepository = require('./SettingsRepository');
 
 
-var mongo = require('mongodb');
-var url = process.env.MONGOHQ_URL; // Stored in config file since we don't want this in public repo
+function MeasureEntity(){}
+function SettingsEntity(){}
+
+var measureRepository = new MeasureRepository.MeasureRepository();
+var settingsRepository = new SettingsRepository.SettingsRepository();
 
 
 exports.index = function(req, res){
@@ -14,6 +19,9 @@ exports.index = function(req, res){
   res.render('index', { title: 'fractalistic', 'local': isLocal });
 };
 
+
+
+// API
 
 exports.getweatherdata = function(req, res){
   var request = require('request');
@@ -48,33 +56,27 @@ exports.getweatherdata = function(req, res){
 
 };
 
+
 exports.getsettings = function(req, res){
-  mongo.Db.connect(url, function (err, db) {
-    db.collection('settings', function(er, collection) {
-      collection.findOne({key:1}, function(er, item) {
-        res.json(item);
-      });
-    });
+  settingsRepository.findOne(1, function(entity){
+    res.json(entity);
   });
 }
 
+
 exports.setsettings = function(req, res){
+  var SettingsEntity = new SettingsEntity();
 
-  var mode = req.query.mode || null;
+  settingsEntity.mode = req.query.mode || null;
 
-  if(mode != 'home' && mode != 'away'){
-    res.send(':(');
+  if(settingsEntity.mode != 'home' && settingsEntity.mode != 'away'){
+    res.json(422, {'message':'Bad'});
     return;
   }
 
-  var date = new Date();
+  settingsEntity.date = new Date();
 
-  mongo.Db.connect(url, function (err, db) {
-    db.collection('settings', function(er, collection) {
-      collection.update({key:1}, {$set:{'mode': mode, 'date': date}}, {safe: true}, function(er,rs) {
-      });
-    });
-  });
+  settingsRepository.persist(settingsEntity);
 
   res.send(':)');
 };
@@ -82,31 +84,24 @@ exports.setsettings = function(req, res){
 
 
 
-
 exports.getstat = function(req, res){
-  mongo.Db.connect(url, function (err, db) {
-    db.collection('stat', function(er, collection) {
-      collection.findOne({key:1}, function(er, item) {
-        res.json(item);
-      });
-    });
+  measureRepository.findOne(1, function(entity){
+    res.json(entity);
   });
 }
 
+
+
 exports.setstat = function(req, res){
-  var date = new Date();
+  var measureEntity = new MeasureEntity();
 
-  var temp = req.params.temp;
-  var mode = req.params.mode;
-  var output = req.params.output;
-  var outputRes = req.params.outputRes;
+  measureEntity.date = new Date();
+  measureEntity.temp = req.params.temp;
+  measureEntity.mode = req.params.mode;
+  measureEntity.output = req.params.output;
+  measureEntity.outputRes = req.params.outputRes;
 
-  mongo.Db.connect(url, function (err, db) {
-    db.collection('stat', function(er, collection) {
-      collection.update({key:1}, {$set:{'mode': mode, 'date': date, 'temp': temp, 'output': output, 'outputRes': outputRes}}, {safe: true}, function(er,rs) {
-      });
-    });
-  });
+  measureRepository.persist(measureEntity);
 
   res.send(':)');
 };
