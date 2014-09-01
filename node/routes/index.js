@@ -6,6 +6,7 @@ var MeasureRepository = require('./MeasureRepository');
 var SettingsRepository = require('./SettingsRepository');
 
 var url = process.env.MONGOHQ_URL || config.MONGOHQ_URL;
+var postmark_api = process.env.POSTMARK_API || config.POSTMARK_API;
 
 function MeasureEntity(){}
 function SettingsEntity(){}
@@ -13,6 +14,30 @@ function SettingsEntity(){}
 var measureRepository = new MeasureRepository.MeasureRepository(url);
 var settingsRepository = new SettingsRepository.SettingsRepository(url);
 
+
+var notifier = function(msg){
+
+  if(msg.temp < 60)
+  {
+    return;
+  }
+
+
+  var postmark = require('postmark')(postmark_api);
+
+  postmark.send({
+    "From":"david@jord.io",
+    "To":"david@pnd.se",
+    "Subject":"Fractalistic temperaturvarning",
+    "TextBody":"Temperaturen är över 55 grader.\n\nHälsningar,\npannan"
+  }, function(error, success){
+    if(error)
+    {
+      console.error(error.message);
+      return;
+    }
+  });
+}
 
 
 
@@ -110,6 +135,7 @@ exports.setstat = function(req, res){
 
   measureRepository.persist(measureEntity);
 
+  notifier(measureEntity);
+
   res.json(measureEntity);
 };
-
