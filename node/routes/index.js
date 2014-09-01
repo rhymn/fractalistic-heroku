@@ -17,7 +17,7 @@ var settingsRepository = new SettingsRepository.SettingsRepository(url);
 
 var notifier = function(msg){
 
-  if(msg.temp < 60)
+  if(msg.temp < 68)
   {
     return;
   }
