@@ -17,7 +17,7 @@ var settingsRepository = new SettingsRepository.SettingsRepository(url);
 
 var notifier = function(msg){
 
-  if(msg.temp < 68)
+  if(msg.temp > 55 && msg.temp < 68)
   {
     return;
   }
@@ -29,7 +29,7 @@ var notifier = function(msg){
     "From":"david@jord.io",
     "To":"david@pnd.se",
     "Subject":"Fractalistic temperaturvarning",
-    "TextBody":"Temperaturen är över 55 grader.\n\nHälsningar,\npannan"
+    "TextBody":"Temperaturen är " + msg.temp + " grader.\n\nHälsningar,\npannan"
   }, function(error, success){
     if(error)
     {
