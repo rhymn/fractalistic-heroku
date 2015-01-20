@@ -26,6 +26,15 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+
+
+/************
+*			*
+*	Models 	*
+*			*
+*************/
+
+
 app.get('/', routes.index);
 
 app.get('/setsettings', routes.setsettings);

@@ -40,6 +40,14 @@ var notifier = function(measureEntity){
 }
 
 
+/**
+ * temp in C
+ * speed in m/s
+ */
+function windchillSteadmann (temp, speed) {  
+  return 1.41 - 1.1620 * speed + 0.9800 * temp + 0.0124 * speed * speed + 0.0185 * speed * temp;
+}
+
 
 exports.index = function(req, res){
   isLocal = false;
@@ -80,6 +88,8 @@ exports.getweatherdata = function(req, res){
         }
       }
 
+      weatherdata['relTemp'] = Math.round(windchillSteadmann(weatherdata['t'], weatherdata['ws']));
+
       res.send(weatherdata);
 
     }
@@ -87,6 +97,7 @@ exports.getweatherdata = function(req, res){
   });
 
 };
+
 
 
 exports.getsettings = function(req, res){

@@ -36,6 +36,12 @@ block content
 		div.row
 			div.col-xs-12
 				p.lead
+					span Relativ temperatur: 
+					span#rel-temp
+
+		div.row
+			div.col-xs-12
+				p.lead
 					span Effekt 
 					span#output
 					span  av 200 (
@@ -100,6 +106,7 @@ block content
 			}).done(function(data){
 				$('#outside-temp').html(data.t);
 				$('#wind-speed').html(data.ws);
+				$('#rel-temp').html(data.relTemp);
 			});
 
 
